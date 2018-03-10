@@ -35,29 +35,42 @@ if [ "$?" -eq 0 ];then
     mc cp -r $FILES_DIR /ts3
 fi
 
-_daemon() {
-  while true; do
-    sleep $BACKUP_INTERVAL
-    echo "Daemon here..."
+_snapshot(){
     echo "Snapshot"
     HHH="$(date +"%Y%m%d_%H%M%S")-$(hostname)"
     mc cp -r /ts3/files $BUCKET_SERVICE/$HHH
     mc cp /ts3/ts3server.sqlitedb $BUCKET_SERVICE/$HHH/ts3server.sqlitedb
+}
+
+_daemon() {
+  while true; do
+    sleep $BACKUP_INTERVAL
+    echo "Daemon here..."
+    _snapshot
     echo "... daemon done"
   done
 }
 
+_backup(){
+    echo "Backing up files"
+    mc cp -r /ts3/files $BUCKET_SERVICE
+    echo "Backing up database"
+    mc cp /ts3/ts3server.sqlitedb $BUCKET_SERVICE/ts3server.sqlitedb
+}
+
+_term() {
+  info "Closing signal received:"
+  kill -TERM "$child" 2>/dev/null
+  
+  _snapshot
+  _backup
+}
+
+trap _term SIGINT SIGTERM
+
 _daemon &
 
-./ts3server start
-
-echo "Snapshot"
-HHH="$(date +"%Y%m%d_%H%M%S")-$(hostname)"
-mc cp -r /ts3/files $BUCKET_SERVICE/$HHH
-mc cp /ts3/ts3server.sqlitedb $BUCKET_SERVICE/$HHH/ts3server.sqlitedb
-
-echo "Backing up files"
-mc cp -r /ts3/files $BUCKET_SERVICE
-
-echo "Backing up database"
-mc cp /ts3/ts3server.sqlitedb $BUCKET_SERVICE/ts3server.sqlitedb
+./ts3server start &
+          
+child=$!
+wait "$child"
