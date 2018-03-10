@@ -1,0 +1,8 @@
+# docker-teamspeak3
+Env variables:
+- S3_SERVER
+- S3_USER
+- S3_PASSWORD
+- S3_BUCKET
+- BACKUP_INTERVAL
+- TS3SERVER_LICENSE accept
