@@ -13,7 +13,7 @@ RUN mv /tmp/teamspeak3-server_linux_amd64 /ts3
 ENV LD_LIBRARY_PATH /ts3
 
 # Install minio client
-RUN curl -L -o /usr/local/bin/mc https://dl.minio.io/client/mc/release/linux-amd64/mc
+RUN curl -L -o /usr/local/bin/mc https://storage.ennetech.me:9000/assets/mc
 RUN chmod +x /usr/local/bin/mc
 
 COPY entrypoint.sh /entrypoint.sh
