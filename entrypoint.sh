@@ -47,6 +47,7 @@ _daemon() {
     sleep $BACKUP_INTERVAL
     echo "Daemon here..."
     _snapshot
+    _backup
     echo "... daemon done"
   done
 }
