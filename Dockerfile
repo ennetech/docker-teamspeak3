@@ -4,7 +4,7 @@ RUN \
   apt-get update && \
   apt-get install -y curl bzip2
 
-RUN curl -L -o /tmp/teamspeak.tar.bz2 https://files.teamspeak-services.com/releases/server/3.12.1/teamspeak3-server_linux_amd64-3.12.1.tar.bz2
+RUN curl -L -o /tmp/teamspeak.tar.bz2 https://files.teamspeak-services.com/releases/server/3.13.3/teamspeak3-server_linux_amd64-3.13.3.tar.bz2
 
 RUN cd /tmp && tar -jxvf teamspeak.tar.bz2 && rm /tmp/teamspeak.tar.bz2
 
